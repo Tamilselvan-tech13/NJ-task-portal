@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: nj-team-task
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    disk:
+      name: nj-team-task-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PORT
+        value: "3000"
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: UPLOADS_DIR
+        value: /var/data/uploads
+      - key: SESSIONS_DIR
+        value: /var/data
+      - key: SESSION_SECRET
+        generateValue: true

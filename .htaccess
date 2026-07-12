@@ -1,0 +1,17 @@
+# .htaccess for XAMPP / shared hosting
+RewriteEngine On
+RewriteBase /
+
+# Serve static assets from the public directory
+RewriteRule ^(css|js|uploads|images|fonts|assets)/(.*)$ /public/$1/$2 [L]
+
+# Route API calls to PHP front-controller preserving query string
+RewriteRule ^api/(.*)$ /index.php?php_api=$1 [L,QSA]
+
+# If requested file/folder exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Fallback — serve SPA entry
+RewriteRule ^.*$ /index.php [L,QSA]

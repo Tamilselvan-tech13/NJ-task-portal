@@ -3,7 +3,7 @@ services:
     name: nj-team-task
     runtime: node
     plan: starter
-    buildCommand: npm install
+    buildCommand: npm ci --only=production
     startCommand: npm start
     disk:
       name: nj-team-task-data

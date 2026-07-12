@@ -2,26 +2,30 @@
 const path = require("path");
 const fs = require("fs");
 
-const DATA_DIR = process.env.DATA_DIR || "./data";
+function initDb() {
+  const DATA_DIR = process.env.DATA_DIR || "./data";
 
-// Create data directory if it doesn't exist
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+  // Create data directory if it doesn't exist
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+
+  const dbPath = path.join(DATA_DIR, "tasks.db");
+
+  const db = new sqlite3.Database(dbPath, (err) => {
+    if (err) {
+      console.error("Error opening database:", err);
+      process.exit(1);
+    } else {
+      console.log("Connected to SQLite database at:", dbPath);
+      initializeTables(db);
+    }
+  });
+
+  return db;
 }
 
-const dbPath = path.join(DATA_DIR, "tasks.db");
-
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error("Error opening database:", err);
-    process.exit(1);
-  } else {
-    console.log("Connected to SQLite database at:", dbPath);
-    initializeTables();
-  }
-});
-
-function initializeTables() {
+function initializeTables(db) {
   // Users table
   db.run(`
     CREATE TABLE IF NOT EXISTS users (
@@ -79,4 +83,4 @@ function initializeTables() {
   console.log("Database tables initialized successfully");
 }
 
-module.exports = db;
+module.exports = initDb;

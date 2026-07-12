@@ -83,4 +83,4 @@ function initializeTables(db) {
   console.log("Database tables initialized successfully");
 }
 
-module.exports = initDb;
+module.exports = { initDb };
